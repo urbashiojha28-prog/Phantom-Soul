@@ -4,134 +4,94 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const PRODUCTS = [
-  { id: 1, name: "Architectural Form", price: 450, category: "Topwear", sub: "Men", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop", volume: "01" },
-  { id: 2, name: "Ethereal Thread", price: 380, category: "Topwear", sub: "Women", img: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1000&auto=format&fit=crop", volume: "02" },
-  { id: 3, name: "Shadow Essence", price: 520, category: "Winter", sub: "Men", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop", volume: "03" },
-  { id: 4, name: "Thermal Resilience", price: 600, category: "Winter", sub: "Kids", img: "https://images.unsplash.com/photo-1611422275127-0a4f2b0e6e7e?q=80&w=1000&auto=format&fit=crop", volume: "04" },
-  { id: 5, name: "Fluid Structure", price: 320, category: "Summer", sub: "Women", img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1000&auto=format&fit=crop", volume: "05" },
-  { id: 6, name: "Veridian Onyx Shell", price: 850, category: "All Seasonal", sub: "Men", img: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=1000&auto=format&fit=crop", volume: "06" },
+  { id: 1, name: "Architectural Form", price: 450, category: "Topwear", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800", volume: "01" },
+  { id: 2, name: "Ethereal Thread", price: 380, category: "Topwear", img: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800", volume: "02" },
+  { id: 3, name: "Shadow Essence", price: 520, category: "Winter", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800", volume: "03" },
+  { id: 4, name: "Thermal Resilience", price: 600, category: "Winter", img: "https://images.unsplash.com/photo-1611422275127-0a4f2b0e6e7e?auto=format&fit=crop&w=800", volume: "04" }
 ];
 
 export default function PhantomSoul() {
   const [mounted, setMounted] = useState(false);
   const [cart, setCart] = useState(0);
   const [activeCategory, setActiveCategory] = useState("All Seasonal");
-  const [searchQuery, setSearchQuery] = useState("");
 
-  // Prevents hydration error
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter(p => {
-      const matchesCategory = activeCategory === "All Seasonal" || p.category === activeCategory || p.sub === activeCategory;
-      const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
-  }, [activeCategory, searchQuery]);
+    return activeCategory === "All Seasonal" 
+      ? PRODUCTS 
+      : PRODUCTS.filter(p => p.category === activeCategory);
+  }, [activeCategory]);
 
   if (!mounted) return null;
 
   return (
-    <div className="flex min-h-screen bg-[#001718] text-[#cde8e8] font-sans selection:bg-[#a9d2b6] selection:text-[#113723]">
-      {/* Material Symbols - Only loads on client */}
+    <div className="min-h-screen bg-[#001718] text-[#cde8e8] font-sans">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
       
-      {/* SIDEBAR */}
-      <aside className="hidden lg:flex h-full w-72 fixed left-0 top-0 bg-[#051f20] flex-col py-8 px-4 z-40 border-r border-white/5">
-        <div className="mb-12 mt-8 px-4">
-          <h2 className="text-xl font-black uppercase tracking-[0.2em]">Phantom Soul</h2>
-          <p className="text-[10px] text-[#a9d2b6]/50 tracking-widest mt-1 uppercase">High-End Editorial</p>
-        </div>
-        
-        <nav className="flex flex-col gap-1 flex-grow overflow-y-auto">
-          {['Topwear', 'Bottomwear', 'Winter', 'Summer', 'All Seasonal', 'Men', 'Women', 'Kids'].map((cat) => (
-            <button
-              key={cat}
+      {/* Navigation */}
+      <aside className="fixed left-0 top-0 h-full w-64 bg-[#051f20] p-8 border-r border-white/5 z-50 hidden lg:block">
+        <h1 className="text-xl font-bold tracking-widest uppercase mb-12">Phantom Soul</h1>
+        <nav className="space-y-4">
+          {['Topwear', 'Winter', 'All Seasonal'].map(cat => (
+            <button 
+              key={cat} 
               onClick={() => setActiveCategory(cat)}
-              className={`flex items-center gap-4 py-3 px-4 rounded-sm transition-all duration-300 text-left ${
-                activeCategory === cat ? 'bg-[#20393a] text-[#a9d2b6] font-bold' : 'text-white/40 hover:text-white hover:bg-white/5'
-              }`}
+              className={`block w-full text-left text-xs uppercase tracking-widest p-2 transition-colors ${activeCategory === cat ? 'text-[#a9d2b6] font-bold' : 'text-white/40 hover:text-white'}`}
             >
-              <span className="text-[10px] tracking-[0.3em] uppercase">{cat}</span>
+              {cat}
             </button>
           ))}
         </nav>
       </aside>
 
-      {/* MAIN CONTENT AREA */}
-      <main className="lg:ml-72 flex-grow relative">
-        {/* HEADER */}
-        <header className="fixed top-0 left-0 lg:left-72 right-0 z-50 bg-[#001718]/80 backdrop-blur-md border-b border-white/5 px-8 py-5 flex justify-between items-center">
-          <div className="flex items-center gap-4 flex-grow max-w-md">
-            <span className="material-symbols-outlined text-[#a9d2b6] text-xl">search</span>
-            <input 
-              type="text" 
-              placeholder="SEARCH..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent border-none focus:ring-0 text-[10px] tracking-widest uppercase w-full placeholder:text-white/20 outline-none"
-            />
-          </div>
-          <div className="flex items-center gap-8">
-            <div className="relative cursor-pointer" onClick={() => setCart(c => c + 1)}>
-              <span className="material-symbols-outlined text-white hover:text-[#a9d2b6] transition-colors">shopping_bag</span>
-              {cart > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[#a9d2b6] text-[#113723] text-[9px] font-black px-1.5 py-0.5 rounded-full">
-                  {cart}
-                </span>
-              )}
-            </div>
+      {/* Main Content */}
+      <main className="lg:ml-64 relative">
+        <header className="sticky top-0 p-6 flex justify-between items-center bg-[#001718]/80 backdrop-blur-md z-40">
+          <span className="text-[10px] tracking-[0.4em] uppercase text-white/30">{activeCategory} Archive</span>
+          <div className="relative cursor-pointer" onClick={() => setCart(c => c + 1)}>
+            <span className="material-symbols-outlined">shopping_bag</span>
+            {cart > 0 && <span className="absolute -top-2 -right-2 bg-[#a9d2b6] text-black text-[9px] font-bold px-1.5 rounded-full">{cart}</span>}
           </div>
         </header>
 
-        {/* HERO */}
-        <section className="h-[80vh] w-full relative overflow-hidden bg-[#001112] flex items-center">
-          <div className="absolute inset-0 z-0">
-            <img src={PRODUCTS[0].img} className="w-full h-full object-cover grayscale brightness-[0.2]" alt="hero" />
-          </div>
-          <div className="relative z-10 px-12 md:px-20">
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
-              <span className="text-[#a9d2b6] text-xs tracking-[0.6em] uppercase block mb-6">Archive 2026</span>
-              <h1 className="text-7xl md:text-[8rem] font-black uppercase leading-[0.8] tracking-tighter">
-                Phantom <br/> <span className="opacity-10">Soul</span>
-              </h1>
-            </motion.div>
-          </div>
+        {/* Hero */}
+        <section className="h-[70vh] flex items-center px-12 relative overflow-hidden">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+            <span className="text-[#a9d2b6] text-xs tracking-[0.5em] uppercase mb-4 block">Volume 2026</span>
+            <h2 className="text-8xl font-black uppercase leading-none italic opacity-20">Veridian</h2>
+            <h2 className="text-8xl font-black uppercase leading-none -mt-4">Onyx</h2>
+          </motion.div>
         </section>
 
-        {/* GRID */}
-        <section className="py-24 px-8 md:px-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
-            <AnimatePresence mode="popLayout">
-              {filteredProducts.map((product) => (
-                <motion.div
-                  key={product.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="group relative"
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden bg-[#051f20] rounded-sm">
-                    <img src={product.img} className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" alt={product.name} />
-                    <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
-                      <div>
-                        <h3 className="text-xl font-bold uppercase tracking-tighter">{product.name}</h3>
-                        <p className="text-[10px] text-[#a9d2b6] mt-1 tracking-widest uppercase">${product.price}</p>
-                      </div>
-                      <button onClick={() => setCart(c => c + 1)} className="bg-[#a9d2b6] text-[#113723] p-2 rounded-full hover:scale-110 transition-transform">
-                        <span className="material-symbols-outlined text-sm">add</span>
-                      </button>
-                    </div>
+        {/* Product Grid */}
+        <section className="p-12 grid grid-cols-1 md:grid-cols-2 gap-12">
+          <AnimatePresence mode='popLayout'>
+            {filteredProducts.map(product => (
+              <motion.div 
+                key={product.id} 
+                layout
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }}
+                className="group cursor-pointer"
+              >
+                <div className="aspect-[3/4] bg-[#051f20] relative overflow-hidden rounded-sm">
+                  <img src={product.img} className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" alt={product.name} />
+                  <div className="absolute bottom-6 left-6">
+                    <h3 className="text-lg font-bold uppercase">{product.name}</h3>
+                    <p className="text-[10px] text-[#a9d2b6] tracking-widest">${product.price} USD</p>
                   </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </section>
       </main>
+
+      <style jsx global>{`
+        body { margin: 0; background: #001718; color: #cde8e8; font-family: sans-serif; }
+      `}</style>
     </div>
   );
 }
