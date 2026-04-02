@@ -1,1 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHANTOM SOUL | Unreal Motion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #051F20; /* Your Void Color */
+            color: #DAF1DE; /* Your Light Color */
+            overflow-x: hidden;
+        }
 
+        .unreal-glow {
+            box-shadow: 0 0 50px rgba(142, 182, 155, 0.2);
+        }
+
+        .slide-item {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-tab:hover {
+            color: #8EB69B;
+            letter-spacing: 0.2em;
+        }
+
+        /* The Sliding Closet Mockup */
+        .closet-bar {
+            background: linear-gradient(180deg, #163832 0%, #0B2B26 100%);
+            border: 1px solid rgba(142, 182, 155, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sticky top-0 z-50 px-10 py-6 border-b border-[#235347]/30 backdrop-blur-xl flex justify-between items-center">
+        <div class="text-2xl font-black tracking-tighter">PHANTOM SOUL</div>
+        <div class="hidden md:flex gap-8 text-[10px] font-bold uppercase tracking-[0.3em]">
+            <a href="#" class="nav-tab transition-all">Topwear</a>
+            <a href="#" class="nav-tab transition-all">Bottomwear</a>
+            <a href="#" class="nav-tab transition-all">Winter</a>
+            <a href="#" class="nav-tab transition-all">Summer</a>
+            <a href="#" class="nav-tab transition-all">Kids</a>
+        </div>
+        <div class="flex gap-4">
+            <button class="px-5 py-2 border border-[#8EB69B] text-[10px] font-bold uppercase tracking-widest hover:bg-[#8EB69B] hover:text-[#051F20] transition-all">Account</button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <section class="relative rounded-[50px] bg-[#0B2B26] p-16 overflow-hidden min-h-[600px] flex items-center border border-[#163832]">
+            
+            <div class="absolute -right-20 -top-20 w-[600px] h-[600px] bg-[#8EB69B] opacity-10 blur-[150px] animate-pulse"></div>
+
+            <div class="grid lg:grid-cols-2 gap-12 z-10 relative">
+                <div id="hero-text">
+                    <span class="text-[#8EB69B] tracking-[0.5em] text-xs font-bold mb-4 block">SEASON 2026</span>
+                    <h1 class="text-7xl font-black leading-[0.9] mb-8">SLIDE <br/> <span class="opacity-40 font-light">CLOSET</span></h1>
+                    <p class="max-w-md text-lg text-[#8EB69B]/70 mb-10 leading-relaxed">
+                        Motion-driven apparel selection. Inspired by real-time rendering engines. 
+                        Choose your style with inertia-based navigation.
+                    </p>
+                    <button class="px-10 py-5 bg-[#DAF1DE] text-[#051F20] font-black rounded-full hover:scale-105 transition-transform unreal-glow">
+                        VIEW COLLECTION
+                    </button>
+                </div>
+
+                <div class="flex items-end gap-4 h-[400px]" id="closet-container">
+                    <div class="closet-bar w-full h-[60%] rounded-t-full slide-item hover:h-[90%]"></div>
+                    <div class="closet-bar w-full h-[85%] rounded-t-full slide-item hover:h-[100%]"></div>
+                    <div class="closet-bar w-full h-[45%] rounded-t-full slide-item hover:h-[80%]"></div>
+                    <div class="closet-bar w-full h-[70%] rounded-t-full slide-item hover:h-[95%]"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mt-20">
+            <div class="group relative aspect-[3/4] bg-[#163832] rounded-3xl overflow-hidden border border-[#235347]/50 cursor-pointer">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#051F20] to-transparent opacity-80"></div>
+                <div class="absolute bottom-8 left-8">
+                    <p class="text-[10px] tracking-widest text-[#8EB69B]">UNREAL FABRIC</p>
+                    <p class="text-xl font-bold">Phantom Parka</p>
+                </div>
+            </div>
+            <div class="group relative aspect-[3/4] bg-[#235347] rounded-3xl overflow-hidden border border-[#235347]/50 cursor-pointer">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#051F20] to-transparent opacity-80"></div>
+                <div class="absolute bottom-8 left-8">
+                    <p class="text-[10px] tracking-widest text-[#8EB69B]">SUMMER DROPS</p>
+                    <p class="text-xl font-bold">Ghost Tee</p>
+                </div>
+            </div>
+             <div class="group relative aspect-[3/4] bg-[#0B2B26] rounded-3xl overflow-hidden border border-[#235347]/50 cursor-pointer">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#051F20] to-transparent opacity-80"></div>
+                <div class="absolute bottom-8 left-8">
+                    <p class="text-[10px] tracking-widest text-[#8EB69B]">TECH WEAR</p>
+                    <p class="text-xl font-bold">Void Cargo</p>
+                </div>
+            </div>
+             <div class="group relative aspect-[3/4] bg-[#163832] rounded-3xl overflow-hidden border border-[#235347]/50 cursor-pointer">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#051F20] to-transparent opacity-80"></div>
+                <div class="absolute bottom-8 left-8">
+                    <p class="text-[10px] tracking-widest text-[#8EB69B]">ACCESSORIES</p>
+                    <p class="text-xl font-bold">Neural Cap</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Smooth Unreal Engine Entry Animation
+        window.onload = () => {
+            gsap.from("#hero-text", {
+                duration: 1.5,
+                x: -100,
+                opacity: 0,
+                ease: "power4.out"
+            });
+
+            gsap.from(".closet-bar", {
+                duration: 1.2,
+                y: 400,
+                opacity: 0,
+                stagger: 0.1,
+                ease: "back.out(1.7)"
+            });
+        };
+    </script>
+</body>
+</html>
