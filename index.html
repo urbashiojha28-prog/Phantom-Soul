@@ -18,6 +18,7 @@ export default function PhantomSoul() {
   const [activeCategory, setActiveCategory] = useState("All Seasonal");
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Prevents hydration error
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -30,11 +31,11 @@ export default function PhantomSoul() {
     });
   }, [activeCategory, searchQuery]);
 
-  if (!mounted) return <div className="bg-[#001718] min-h-screen" />;
+  if (!mounted) return null;
 
   return (
     <div className="flex min-h-screen bg-[#001718] text-[#cde8e8] font-sans selection:bg-[#a9d2b6] selection:text-[#113723]">
-      {/* Material Symbols Import */}
+      {/* Material Symbols - Only loads on client */}
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
       
       {/* SIDEBAR */}
@@ -49,7 +50,7 @@ export default function PhantomSoul() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`flex items-center gap-4 py-3 px-4 rounded-sm transition-all duration-300 ${
+              className={`flex items-center gap-4 py-3 px-4 rounded-sm transition-all duration-300 text-left ${
                 activeCategory === cat ? 'bg-[#20393a] text-[#a9d2b6] font-bold' : 'text-white/40 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -59,9 +60,10 @@ export default function PhantomSoul() {
         </nav>
       </aside>
 
-      {/* MAIN CONTENT */}
+      {/* MAIN CONTENT AREA */}
       <main className="lg:ml-72 flex-grow relative">
-        <header className="fixed top-0 left-0 lg:left-72 right-0 z-50 bg-[#001718]/60 backdrop-blur-xl border-b border-white/5 px-8 py-5 flex justify-between items-center">
+        {/* HEADER */}
+        <header className="fixed top-0 left-0 lg:left-72 right-0 z-50 bg-[#001718]/80 backdrop-blur-md border-b border-white/5 px-8 py-5 flex justify-between items-center">
           <div className="flex items-center gap-4 flex-grow max-w-md">
             <span className="material-symbols-outlined text-[#a9d2b6] text-xl">search</span>
             <input 
@@ -69,7 +71,7 @@ export default function PhantomSoul() {
               placeholder="SEARCH..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent border-none focus:ring-0 text-[10px] tracking-widest uppercase w-full placeholder:text-white/20"
+              className="bg-transparent border-none focus:ring-0 text-[10px] tracking-widest uppercase w-full placeholder:text-white/20 outline-none"
             />
           </div>
           <div className="flex items-center gap-8">
@@ -85,31 +87,31 @@ export default function PhantomSoul() {
         </header>
 
         {/* HERO */}
-        <section className="h-screen w-full relative overflow-hidden bg-[#001112] flex items-center">
+        <section className="h-[80vh] w-full relative overflow-hidden bg-[#001112] flex items-center">
           <div className="absolute inset-0 z-0">
             <img src={PRODUCTS[0].img} className="w-full h-full object-cover grayscale brightness-[0.2]" alt="hero" />
           </div>
           <div className="relative z-10 px-12 md:px-20">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
               <span className="text-[#a9d2b6] text-xs tracking-[0.6em] uppercase block mb-6">Archive 2026</span>
-              <h1 className="text-7xl md:text-[10rem] font-black uppercase leading-[0.8] tracking-tighter">
+              <h1 className="text-7xl md:text-[8rem] font-black uppercase leading-[0.8] tracking-tighter">
                 Phantom <br/> <span className="opacity-10">Soul</span>
               </h1>
             </motion.div>
           </div>
         </section>
 
-        {/* DYNAMIC GRID */}
-        <section className="py-32 px-8 md:px-16">
+        {/* GRID */}
+        <section className="py-24 px-8 md:px-16">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
             <AnimatePresence mode="popLayout">
               {filteredProducts.map((product) => (
                 <motion.div
                   key={product.id}
                   layout
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
                   className="group relative"
                 >
                   <div className="relative aspect-[3/4] overflow-hidden bg-[#051f20] rounded-sm">
@@ -130,14 +132,6 @@ export default function PhantomSoul() {
           </div>
         </section>
       </main>
-
-      <style jsx global>{`
-        body { margin: 0; padding: 0; }
-        .editorial-kerning { letter-spacing: -0.05em; }
-        ::-webkit-scrollbar { width: 3px; }
-        ::-webkit-scrollbar-track { background: #001718; }
-        ::-webkit-scrollbar-thumb { background: #a9d2b6; }
-      `}</style>
     </div>
   );
 }
