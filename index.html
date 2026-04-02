@@ -1,27 +1,27 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-/** * DYNAMIC DATA STRATEGY
- * Sample products representing the "Phantom Soul" archive
- */
 const PRODUCTS = [
-  { id: 1, name: "Architectural Form", price: 450, category: "Topwear", sub: "Men", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDhaJ2MCZPG3qGTfLXfxMNwO1b4IPPK21-BoXmkERDF-sxIJuy4PZUbX2b2o2M2ywspN8YzVLl_SvKkM7oD5HQd0sCpEUrI64klW4TOeeHG4B3IGBCZyuoR_7nY5VsTJr4gh6EGHFHVDATpoH6cxhK95S_hdcQ6NRuBMlcUeqsgUV2whgRXgFZnIL8TVbJaWD-OPCDft_LolqiyNSIbskxLcSLV-0BzB3c2S6yCAtEW_Lw4gy_2g4XZHZYz8__7cOKvofzZCAubej9u", volume: "01" },
-  { id: 2, name: "Ethereal Thread", price: 380, category: "Topwear", sub: "Women", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDjM9QDYHdHKievP-w--LcqRsQt7nISeWp3GLJ4qvnb-3FUN99OCRx_zr-HlZiaQqt9pLojbm9S0lC0Ap8jU3SB-kU_J5WmP2YaQ3obBf7Orz9I53FJN8UjjCp8FwvpeyFLFC9X26MEVkAFFX83rjIuttId472b9BZa4Z7oMDCip6ToPMesE3bsapw2QedFE-s66-_sY4pAgK3YnnFVtN9XkaEaMduvLDTJA40WNeMrORnAcwcSBFuUmAGESR-FISqp8uHwH9NdPoyV", volume: "02" },
-  { id: 3, name: "Shadow Essence", price: 520, category: "Winter", sub: "Men", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBQRKm2OkvSTWsu9twyD1R_rdN1jRs1rK7LiC5tFFxchb-FbfJ9jFEa58OPdPTqdQZXW9KcXrDgz3wG2ceiQFVl92nj14aLWDaLKL-Aker3Sm5t_S8vmB_D76GYn3zia9VUtCSr-iFouYdmRRSrj_AX-FTH445Mlx-RtaZxZ711fzIvyc8MP0CzEqAdFDUIdk5ayYZvwEgDSc_aes6tlSHXoisBVo7RWgp9wcvQIcF8jGz1ISqfVF1wtkTus6H5HFiDSDd05cRzPBYw", volume: "03" },
-  { id: 4, name: "Thermal Resilience", price: 600, category: "Winter", sub: "Kids", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBpdyYguXDZkS-AKIi6s5vhNFPvINpoMMNwgrlXyu47TpsqyHxa7qKG8atWjK_9WYk5BBQHKgA1cd6G1BOU8QDfsGRZnRCliDsNwLJSzBIiWxHkBn7Yx7kJzL-CQri9gz9iRYNWpqcQOhOB7WwXHmFGi_BIo1NDl5vR3Q9k1OZ6AMl1e5o1c9uyyCGHSyjnVNNq7n5yOiLSS8-ara0XLh2fJhoxfh9tr-i42-UZSR-iKK2g_D0x3dPDl7VvCtfAwX7ROo-b3W-PpDyy", volume: "04" },
-  { id: 5, name: "Fluid Structure", price: 320, category: "Summer", sub: "Women", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC9YYaFH5mLekofd9hZgRqb_HD2R1BET-oNArlPxRpHEiv-tSto94l7ofutfmbXsmj0Xw7czvEZ6XcI6yFBjEEz-5hrjSNFBsLmkDIWcSc3xjzTrXfZBwYYpbFFcsIJGPDebmZx-xR4oOaFKKpWW09MKgBK4RRNenDK9GCVyILaNDd7C6siwh8yD7zfIme0bBk6dBL769Q6iA0JC6s5anSJC-IhSdY7Sops6c8S8a3iuxIsdxmJbTrVbXGcMoyYJbAtIgPjyb39FM9u", volume: "05" },
-  { id: 6, name: "Veridian Onyx Shell", price: 850, category: "All Seasonal", sub: "Men", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDtBtL6n4R_ihQkSQVseRa2m2ztdGgulVx5u9e4IPsP3lD3dlek3oJxE7iEM5GNLVSeKJ1mpyTgLCBk7q138_-qUePz0haJEOFKbOPy5djI2IVzN_RIXWTzN4uZbb-eAoP9UduRTqJk2f_XYbApsgbXdrYSOaDEWj4dHb3a_8mPcIaY4KrFjlvtYwBZRwVBMFXcHYAL4B63_I4VI7bIlCqiCXommfUm5eNCAy5iNEzagAI874SHUnLlEevpLNx6vAlCLTP5mmDhfUyf", volume: "06" },
+  { id: 1, name: "Architectural Form", price: 450, category: "Topwear", sub: "Men", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop", volume: "01" },
+  { id: 2, name: "Ethereal Thread", price: 380, category: "Topwear", sub: "Women", img: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1000&auto=format&fit=crop", volume: "02" },
+  { id: 3, name: "Shadow Essence", price: 520, category: "Winter", sub: "Men", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop", volume: "03" },
+  { id: 4, name: "Thermal Resilience", price: 600, category: "Winter", sub: "Kids", img: "https://images.unsplash.com/photo-1611422275127-0a4f2b0e6e7e?q=80&w=1000&auto=format&fit=crop", volume: "04" },
+  { id: 5, name: "Fluid Structure", price: 320, category: "Summer", sub: "Women", img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1000&auto=format&fit=crop", volume: "05" },
+  { id: 6, name: "Veridian Onyx Shell", price: 850, category: "All Seasonal", sub: "Men", img: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=1000&auto=format&fit=crop", volume: "06" },
 ];
 
 export default function PhantomSoul() {
-  // --- STATE MANAGEMENT ---
+  const [mounted, setMounted] = useState(false);
   const [cart, setCart] = useState(0);
   const [activeCategory, setActiveCategory] = useState("All Seasonal");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // --- FILTER LOGIC ---
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const filteredProducts = useMemo(() => {
     return PRODUCTS.filter(p => {
       const matchesCategory = activeCategory === "All Seasonal" || p.category === activeCategory || p.sub === activeCategory;
@@ -30,17 +30,14 @@ export default function PhantomSoul() {
     });
   }, [activeCategory, searchQuery]);
 
-  // --- ANIMATION VARIANTS ---
-  const fadeIn = {
-    initial: { opacity: 0, y: 30 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
-  };
+  if (!mounted) return <div className="bg-[#001718] min-h-screen" />;
 
   return (
     <div className="flex min-h-screen bg-[#001718] text-[#cde8e8] font-sans selection:bg-[#a9d2b6] selection:text-[#113723]">
+      {/* Material Symbols Import */}
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
       
-      {/* SIDE NAVIGATION */}
+      {/* SIDEBAR */}
       <aside className="hidden lg:flex h-full w-72 fixed left-0 top-0 bg-[#051f20] flex-col py-8 px-4 z-40 border-r border-white/5">
         <div className="mb-12 mt-8 px-4">
           <h2 className="text-xl font-black uppercase tracking-[0.2em]">Phantom Soul</h2>
@@ -52,7 +49,7 @@ export default function PhantomSoul() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`flex items-center gap-4 py-3 px-4 rounded-sm transition-all duration-300 group ${
+              className={`flex items-center gap-4 py-3 px-4 rounded-sm transition-all duration-300 ${
                 activeCategory === cat ? 'bg-[#20393a] text-[#a9d2b6] font-bold' : 'text-white/40 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -60,136 +57,71 @@ export default function PhantomSoul() {
             </button>
           ))}
         </nav>
-
-        <div className="mt-auto px-4">
-          <button className="w-full py-4 bg-[#a9d2b6] text-[#113723] text-[10px] font-black uppercase tracking-widest rounded-sm hover:brightness-110 transition-all">
-            Explore Archive
-          </button>
-        </div>
       </aside>
 
-      {/* MAIN CONTENT AREA */}
+      {/* MAIN CONTENT */}
       <main className="lg:ml-72 flex-grow relative">
-        
-        {/* FLOATING HEADER */}
         <header className="fixed top-0 left-0 lg:left-72 right-0 z-50 bg-[#001718]/60 backdrop-blur-xl border-b border-white/5 px-8 py-5 flex justify-between items-center">
-          <div className="flex items-center gap-6 flex-grow max-w-md">
+          <div className="flex items-center gap-4 flex-grow max-w-md">
             <span className="material-symbols-outlined text-[#a9d2b6] text-xl">search</span>
             <input 
               type="text" 
-              placeholder="SEARCH THE ARCHIVE..." 
+              placeholder="SEARCH..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="bg-transparent border-none focus:ring-0 text-[10px] tracking-widest uppercase w-full placeholder:text-white/20"
             />
           </div>
-
           <div className="flex items-center gap-8">
-            <div className="relative group cursor-pointer" onClick={() => alert('Cart functionality initialized.')}>
+            <div className="relative cursor-pointer" onClick={() => setCart(c => c + 1)}>
               <span className="material-symbols-outlined text-white hover:text-[#a9d2b6] transition-colors">shopping_bag</span>
               {cart > 0 && (
-                <motion.span 
-                  initial={{ scale: 0 }} animate={{ scale: 1 }}
-                  className="absolute -top-2 -right-2 bg-[#a9d2b6] text-[#113723] text-[9px] font-black px-1.5 py-0.5 rounded-full"
-                >
+                <span className="absolute -top-2 -right-2 bg-[#a9d2b6] text-[#113723] text-[9px] font-black px-1.5 py-0.5 rounded-full">
                   {cart}
-                </motion.span>
+                </span>
               )}
             </div>
-            <span className="material-symbols-outlined text-white cursor-pointer">person</span>
           </div>
         </header>
 
-        {/* HERO: SLIDE CLOSET SECTION */}
+        {/* HERO */}
         <section className="h-screen w-full relative overflow-hidden bg-[#001112] flex items-center">
-          <div className="absolute inset-0 z-0 overflow-hidden">
-            <motion.div 
-              animate={{ scale: [1, 1.1, 1] }} 
-              transition={{ duration: 20, repeat: Infinity }}
-              className="w-full h-full"
-            >
-              <img 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhaJ2MCZPG3qGTfLXfxMNwO1b4IPPK21-BoXmkERDF-sxIJuy4PZUbX2b2o2M2ywspN8YzVLl_SvKkM7oD5HQd0sCpEUrI64klW4TOeeHG4B3IGBCZyuoR_7nY5VsTJr4gh6EGHFHVDATpoH6cxhK95S_hdcQ6NRuBMlcUeqsgUV2whgRXgFZnIL8TVbJaWD-OPCDft_LolqiyNSIbskxLcSLV-0BzB3c2S6yCAtEW_Lw4gy_2g4XZHZYz8__7cOKvofzZCAubej9u" 
-                className="w-full h-full object-cover grayscale brightness-[0.3]" 
-                alt="hero" 
-              />
-            </motion.div>
+          <div className="absolute inset-0 z-0">
+            <img src={PRODUCTS[0].img} className="w-full h-full object-cover grayscale brightness-[0.2]" alt="hero" />
           </div>
-          
           <div className="relative z-10 px-12 md:px-20">
-            <motion.div {...fadeIn}>
-              <span className="text-[#a9d2b6] text-xs tracking-[0.6em] uppercase block mb-6">Cinematic Collection 2026</span>
-              <h1 className="text-7xl md:text-[10rem] font-black uppercase leading-[0.8] tracking-tighter editorial-kerning">
-                Phantom <br/> <span className="text-white/10 outline-text">Soul</span>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+              <span className="text-[#a9d2b6] text-xs tracking-[0.6em] uppercase block mb-6">Archive 2026</span>
+              <h1 className="text-7xl md:text-[10rem] font-black uppercase leading-[0.8] tracking-tighter">
+                Phantom <br/> <span className="opacity-10">Soul</span>
               </h1>
-              <p className="mt-8 max-w-lg text-white/40 text-sm tracking-wide leading-relaxed">
-                A study of architectural form and thermal resilience. Explore the intersection of high-fashion and industrial utility.
-              </p>
             </motion.div>
-          </div>
-
-          <div className="absolute bottom-12 right-12 flex items-center gap-6">
-            <span className="text-[10px] tracking-[0.5em] uppercase text-white/30">Scroll to explore</span>
-            <div className="w-32 h-px bg-white/10 relative">
-              <motion.div 
-                animate={{ left: ["0%", "100%", "0%"] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute top-0 h-full w-1/3 bg-[#a9d2b6]" 
-              />
-            </div>
           </div>
         </section>
 
-        {/* COLLECTION GRID */}
+        {/* DYNAMIC GRID */}
         <section className="py-32 px-8 md:px-16">
-          <div className="flex justify-between items-end mb-20">
-            <motion.div {...fadeIn}>
-              <span className="text-[#a9d2b6] text-[10px] tracking-[0.4em] uppercase mb-4 block">Active Domain</span>
-              <h2 className="text-5xl font-bold uppercase tracking-tight italic">{activeCategory}</h2>
-            </motion.div>
-            <div className="text-[10px] tracking-widest text-white/20 uppercase">
-              Showing {filteredProducts.length} Results
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
             <AnimatePresence mode="popLayout">
               {filteredProducts.map((product) => (
                 <motion.div
                   key={product.id}
                   layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   className="group relative"
                 >
                   <div className="relative aspect-[3/4] overflow-hidden bg-[#051f20] rounded-sm">
-                    <img 
-                      src={product.img} 
-                      className="w-full h-full object-cover grayscale opacity-50 group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" 
-                      alt={product.name} 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#001718] via-transparent to-transparent opacity-90" />
-                    
-                    <div className="absolute top-6 left-6">
-                      <span className="text-[9px] font-black bg-white/10 backdrop-blur-md px-3 py-1 rounded-full uppercase tracking-widest">
-                        Vol. {product.volume}
-                      </span>
-                    </div>
-
-                    <div className="absolute bottom-8 left-8 right-8">
-                      <div className="flex justify-between items-end">
-                        <div>
-                          <h3 className="text-xl font-bold uppercase tracking-tighter">{product.name}</h3>
-                          <p className="text-[10px] text-[#a9d2b6] mt-1 tracking-widest uppercase font-bold">${product.price} USD</p>
-                        </div>
-                        <button 
-                          onClick={() => setCart(c => c + 1)}
-                          className="bg-[#a9d2b6] text-[#113723] p-3 rounded-full hover:scale-110 transition-transform flex items-center justify-center"
-                        >
-                          <span className="material-symbols-outlined text-sm">add</span>
-                        </button>
+                    <img src={product.img} className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" alt={product.name} />
+                    <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
+                      <div>
+                        <h3 className="text-xl font-bold uppercase tracking-tighter">{product.name}</h3>
+                        <p className="text-[10px] text-[#a9d2b6] mt-1 tracking-widest uppercase">${product.price}</p>
                       </div>
+                      <button onClick={() => setCart(c => c + 1)} className="bg-[#a9d2b6] text-[#113723] p-2 rounded-full hover:scale-110 transition-transform">
+                        <span className="material-symbols-outlined text-sm">add</span>
+                      </button>
                     </div>
                   </div>
                 </motion.div>
@@ -197,61 +129,14 @@ export default function PhantomSoul() {
             </AnimatePresence>
           </div>
         </section>
-
-        {/* PHILOSOPHY: CINEMATIC CTA */}
-        <section className="py-40 bg-[#001112] border-y border-white/5 relative overflow-hidden">
-          <div className="absolute right-[-10%] top-0 opacity-[0.02] select-none">
-            <h2 className="text-[20rem] font-black uppercase leading-none">PHANTOM</h2>
-          </div>
-          
-          <div className="max-w-3xl mx-auto text-center px-12 relative z-10">
-            <motion.div {...fadeIn}>
-              <h2 className="text-5xl font-black uppercase mb-8 tracking-widest">Architectural <br/> Integrity</h2>
-              <p className="text-white/40 leading-relaxed text-lg font-light mb-12">
-                We view the garment not as a covering, but as a space to inhabit. Each piece in the Phantom Soul archive is a study of tension and release—the way fabric interacts with the physical frame to create a dialogue of light and shadow.
-              </p>
-              <button className="px-12 py-5 border border-[#a9d2b6]/30 text-[#a9d2b6] text-[10px] font-black uppercase tracking-[0.3em] hover:bg-[#a9d2b6] hover:text-[#113723] transition-all">
-                Join the Monolith
-              </button>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* FOOTER */}
-        <footer className="py-20 px-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="text-[10px] tracking-[0.4em] text-white/20 uppercase">
-            © 2026 Phantom Soul. Produced for the Veridian Monolith.
-          </div>
-          <div className="flex gap-10">
-            {['Privacy', 'Terms', 'Archive', 'Contact'].map(link => (
-              <a key={link} href="#" className="text-[10px] tracking-widest text-white/40 hover:text-[#a9d2b6] uppercase transition-colors">{link}</a>
-            ))}
-          </div>
-        </footer>
-
       </main>
 
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
-        
-        .outline-text {
-          -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
-          color: transparent;
-        }
-
-        .editorial-kerning {
-          letter-spacing: -0.05em;
-        }
-
-        ::-webkit-scrollbar {
-          width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-          background: #001718;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: #20393a;
-        }
+        body { margin: 0; padding: 0; }
+        .editorial-kerning { letter-spacing: -0.05em; }
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: #001718; }
+        ::-webkit-scrollbar-thumb { background: #a9d2b6; }
       `}</style>
     </div>
   );
